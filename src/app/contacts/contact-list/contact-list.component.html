@@ -5,19 +5,14 @@
     </div>
     <div class="panel-body">
       <div class="row">
-        <div *ngFor="let contact of contacts" class="col-md-4 mb-4">
-          <div class="contact-card card shadow-sm">
-            <img [src]="contact.imageUrl" class="card-img-top img-fluid" alt="{{ contact.name }}">
-            <div class="card-body">
-              <h5 class="card-title">{{ contact.name }}</h5>
-              <p class="card-text">{{ contact.email }}</p>
-              <p class="card-text">{{ contact.phone }}</p>
-            </div>
-            <div class="card-footer text-muted">
-              <small>Group: {{ contact.group || 'None' }}</small>
-            </div>
-          </div>
+        <div class="list-group">
+          <app-contact-item 
+            *ngFor="let contact of contacts" 
+            [contact]="contact"
+            (contactSelected)="onSelected(contact)">
+          </app-contact-item>
         </div>
+        
       </div>
     </div>
   </div>

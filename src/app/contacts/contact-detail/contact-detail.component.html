@@ -1,13 +1,14 @@
 <div class="panel panel-default">
-    <div class="panel-heading d-flex justify-content-between align-items-center">
-      <div>
-        <button class="btn btn-warning btn-sm">Edit</button>
-        <button class="btn btn-danger btn-sm">Delete</button>
-      </div>
-    </div>
-    <div class="panel-body">
-        <p><strong>Email:</strong></p>
-        <p><strong>Phone:</strong></p>
+  <div class="panel-heading d-flex justify-content-between align-items-center">
+    <h3 class="panel-title mb-0">{{ contact?.name }}</h3>
+    <img [src]="contact?.imageUrl" class="img-thumbnail" alt="{{ contact?.name }}" style="width: 50px; height: 50px;">
+    <div>
+      <button class="btn btn-warning btn-sm">Edit</button>
+      <button class="btn btn-danger btn-sm">Delete</button>
     </div>
   </div>
-  
+  <div class="panel-body">
+    <p><strong>Email:</strong> {{ contact?.email }}</p>
+    <p><strong>Phone:</strong> {{ contact?.phone }}</p>
+  </div>
+</div>

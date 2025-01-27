@@ -1,18 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Contact } from '../contact.model';
 
 @Component({
   selector: 'app-contact-detail',
   standalone: false,
-  
   templateUrl: './contact-detail.component.html',
-  styleUrl: './contact-detail.component.css'
+  styleUrls: ['./contact-detail.component.css']
 })
-export class ContactDetailComponent implements OnInit {
-  @Input() contact: Contact; // This allows passing data to the component
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+export class ContactDetailComponent {
+  @Input() contact: Contact;
 }
