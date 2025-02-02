@@ -1,0 +1,10 @@
+.navbar-nav.navbar-right {
+    margin-right: 0;
+  }
+  
+  .dropdown-menu {
+    right: 0;
+    left: auto;
+    position: absolute;
+  }
+  
