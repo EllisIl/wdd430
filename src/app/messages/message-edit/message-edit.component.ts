@@ -11,8 +11,6 @@ export class MessageEditComponent implements AfterViewInit {
   @ViewChild('msgTextInput') msgTextInput!: ElementRef;
   @Output() addMessageEvent = new EventEmitter<Message>();
 
-  currentSender = 'Elijah Foard';  // Set a valid sender ID or retrieve it dynamically
-
   ngAfterViewInit() {
     // This ensures ViewChild references are initialized
     if (!this.subjectInput || !this.msgTextInput) {
@@ -26,7 +24,7 @@ export class MessageEditComponent implements AfterViewInit {
         '1',
         this.subjectInput.nativeElement.value,
         this.msgTextInput.nativeElement.value,
-        this.currentSender
+        '1'
       );
 
       this.addMessageEvent.emit(msg);
