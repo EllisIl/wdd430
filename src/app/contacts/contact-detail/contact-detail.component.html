@@ -3,8 +3,8 @@
     <h3 class="panel-title mb-0">{{ contact?.name }}</h3>
     <img [src]="contact?.imageUrl" class="img-thumbnail" alt="{{ contact?.name }}" style="width: 50px; height: 50px;">
     <div>
-      <button class="btn btn-warning btn-sm">Edit</button>
-      <button class="btn btn-danger btn-sm">Delete</button>
+      <button class="btn btn-warning btn-sm" [routerLink]="['/contacts', contact?.id, 'edit']">Edit</button>
+      <button class="btn btn-danger btn-sm" (click)="onDelete()">Delete</button>
     </div>
   </div>
   <div class="panel-body">

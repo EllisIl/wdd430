@@ -1,7 +1,7 @@
-<a class="list-group-item clearfix" (click)="onSelect()">
+<a class="list-group-item clearfix" [routerLink]="['/contacts', contact.id]" routerLinkActive="active">
     <div class="d-flex align-items-center">
-      <img [src]="contact?.imageUrl" class="img-thumbnail" alt="{{ contact?.name }}" style="width: 50px; height: 50px;">
-      <span class="ms-2">{{ contact?.name }}</span>
+      <img [src]="contact.imageUrl" class="img-thumbnail" alt="{{ contact.name }}">
+      <span class="ms-2">{{ contact.name }}</span>
     </div>
   </a>
   
