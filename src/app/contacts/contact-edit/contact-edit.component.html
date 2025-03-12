@@ -1,1 +1,110 @@
-<p>contact-edit works!</p>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <form id="contact-edit" #contactForm="ngForm" (ngSubmit)="onSubmit(contactForm)">
+
+    <div class="row">
+        <div class="col-sm-12 form-group">
+          <label for="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            value={{contact.name}}
+            class="form-control required"
+            size="120"
+            max="120"
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12 form-group">
+          <label for="email">Email:</label>
+          <input
+            type="text"
+            id="email"
+            value={{contact.email}}
+            class="form-control required"
+            size="120"
+            max="255"
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12 form-group">
+          <label for="phone">Phone:</label>
+          <input
+            type="text"
+            id="phone"
+            value={{contact.phone}}
+            class="form-control invalid"
+            size="150"
+            max="255"
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12 form-group">
+          <label for="imageUrl">Image URL:</label>
+          <input
+            type="text"
+            id="imageUrl"
+            value={{contact.imageUrl}}
+            class="form-control"
+            size="150"
+            max="255"
+          />
+        </div>
+      </div>
+
+<!-- Drag-and-drop area for groupContacts -->
+<div class="row">
+  <div class="form-group">
+    <label for="groupList">Group Contacts:</label>
+    <div
+  cdkDropList
+  id="groupContactsList"
+  [cdkDropListData]="groupContacts"
+  [cdkDropListConnectedTo]="['contactsList']"
+  (cdkDropListDropped)="onDrop($event)"
+  (cdkDragEntered)="onDragEnter()"
+  (cdkDragExited)="onDragExit()"
+  [ngClass]="{'drag-hover': isDraggingOver}"
+  class="drop-area"
+  style="min-height: 3rem; border: 1px dashed #ccc; padding: 1rem;"
+>
+  <div *ngFor="let contact of groupContacts; let i = index" cdkDrag>
+    <div class="d-flex justify-content-between">
+      <app-contact-item class="col-sm-11" [contact]="contact"></app-contact-item>
+      <div>
+        <button 
+          class="btn btn-danger col-sm-2 deleteButton" 
+          (click)="onRemoveItem(i); $event.preventDefault();">
+          X
+        </button>
+      </div>
+      
+    </div>
+  </div>
+  <span class="dragMsg" *ngIf="groupContacts?.length < 1">Drag contacts in group here</span>
+</div>
+
+
+  </div>
+</div>
+      <div class="row">
+        <div class="col-xs-12 btn-toolbar">
+          <button class="btn btn-success" type="submit">Save</button>
+          <button
+            class="btn btn-primary"
+            type="button"
+            (click)="onCancel()"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

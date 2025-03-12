@@ -1,7 +1,11 @@
-<a class="list-group-item clearfix" [routerLink]="['/contacts', contact.id]" routerLinkActive="active">
-    <div class="d-flex align-items-center">
-      <img [src]="contact.imageUrl" class="img-thumbnail" alt="{{ contact.name }}">
-      <span class="ms-2">{{ contact.name }}</span>
-    </div>
-  </a>
-  
+<a 
+  class="list-group-item clearfix"
+  [routerLink]="['/contacts', contact.id]"
+  routerLinkActive="active"
+  cdkDrag
+  [cdkDragData]="contact">
+  <div class="d-flex align-items-center">
+    <img [src]="contact.imageUrl" class="img-thumbnail" alt="{{ contact.name }}">
+    <span class="ms-2">{{ contact.name }}</span>
+  </div>
+</a>

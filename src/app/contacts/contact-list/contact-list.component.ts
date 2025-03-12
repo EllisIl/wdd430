@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Contact } from '../contact.model';
 import { ContactService } from '../contact.service';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-contact-list',
@@ -9,8 +10,10 @@ import { ContactService } from '../contact.service';
   styleUrls: ['./contact-list.component.css']
 })
 export class ContactListComponent implements OnInit {
-
   contacts: Contact[] = [];
+
+  @Output() contactSelected = new EventEmitter<Contact>();
+
   constructor(private contactService: ContactService) {}
 
   ngOnInit() {
@@ -20,5 +23,16 @@ export class ContactListComponent implements OnInit {
       this.contacts = contacts;
     });
   }
-}
 
+  onSelected(contact: Contact): void {
+    this.contactSelected.emit(contact);
+  }
+
+  onDrop(event: CdkDragDrop<Contact[]>): void {
+    const draggedContact = event.item.data;
+
+    // You could handle additional logic here, like removing the contact
+    // from this list and adding it to the new list (groupContacts)
+    this.contactService.removeContact(draggedContact.id);  // If you want to remove from the original list
+  }
+}

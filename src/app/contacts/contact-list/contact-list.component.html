@@ -1,19 +1,25 @@
 <div class="panel panel-default">
-    <div class="panel-heading d-flex justify-content-between align-items-center">
-      <h3 class="panel-title mb-0">Contacts</h3>
-      <a [routerLink]="['new']" class="btn btn-primary">Create New Contact</a>
-    </div>
-    <div class="panel-body">
-      <div class="row">
-        <div class="list-group">
-          <app-contact-item 
-            *ngFor="let contact of contacts" 
-            [contact]="contact"
-            (contactSelected)="onSelected(contact)">
-          </app-contact-item>
-        </div>
-        
-      </div>
+  <div class="panel-heading d-flex justify-content-between align-items-center">
+    <h3 class="panel-title mb-0">Contacts</h3>
+    <a [routerLink]="['new']" class="btn btn-primary">Create New Contact</a>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div 
+  class="list-group" 
+  cdkDropList
+  [cdkDropListData]="contacts"
+  [cdkDropListConnectedTo]="['groupContactsList']"
+  (cdkDropListDropped)="onDrop($event)">
+  <app-contact-item
+    *ngFor="let contact of contacts"
+    [contact]="contact"
+    cdkDrag
+    [cdkDragData]="contact"
+  >
+  </app-contact-item>
+</div>
+
     </div>
   </div>
-  
+</div>
