@@ -1,25 +1,52 @@
-import { Injectable, EventEmitter, Output } from '@angular/core';
-import { MOCKMESSAGES } from './MOCKMESSAGES';
+import { Injectable } from '@angular/core';
 import { Message } from './message.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessageService {
-  @Output() messageChangedEvent = new EventEmitter<Message[]>(); // Emits an array
-
   messages: Message[] = [];
+  messageChangedEvent = new Subject<Message[]>();
+  maxMessageId: number = 0;
+  private firebaseUrl = 'https://foard-wdd430-default-rtdb.firebaseio.com/messages.json'; // Replace with your Firebase URL
 
-  constructor() { 
-    this.messages = MOCKMESSAGES;
+  constructor(private http: HttpClient) {
+    this.getMessages();
   }
 
-  getMessages(): Message[] {
-    return this.messages.slice(); // Returns a copy of the array
+  getMessages(): void {
+    this.http.get<Message[]>(this.firebaseUrl).subscribe(
+      (messages: Message[]) => {
+        this.messages = messages ? messages : [];
+        this.maxMessageId = this.getMaxId();
+        this.messages.sort((a, b) => +a.id - +b.id); // Sort messages by ID
+        this.messageChangedEvent.next([...this.messages]);
+      },
+      (error) => console.error('Error fetching messages:', error)
+    );
+  }
+
+  getMaxId(): number {
+    return this.messages.length > 0 
+      ? Math.max(...this.messages.map(message => +message.id)) 
+      : 0;
   }
 
   addMessage(message: Message): void {
+    if (!message) return;
+    
+    message.id = (this.maxMessageId + 1).toString();
     this.messages.push(message);
-    this.messageChangedEvent.emit(this.messages.slice()); // Emits a copy of the updated array
+    this.storeMessages();
+  }
+
+  private storeMessages(): void {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    this.http.put(this.firebaseUrl, this.messages, { headers }).subscribe(
+      () => this.messageChangedEvent.next([...this.messages]),
+      (error) => console.error('Error saving messages:', error)
+    );
   }
 }

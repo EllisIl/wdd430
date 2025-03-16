@@ -1,23 +1,27 @@
-// src/app/contacts/contact.service.ts
-
 import { Injectable } from '@angular/core';
 import { Contact } from './contact.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs';
-import { MOCKCONTACTS } from './MOCKCONTACTS';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContactService {
   contacts: Contact[] = [];
-  selectedContactEvent = new Subject<Contact[]>();
+  contactListChangedEvent = new Subject<Contact[]>();
+  private firebaseUrl = 'https://foard-wdd430-default-rtdb.firebaseio.com/contacts.json'; 
 
-  constructor() {
-    this.contacts = [...MOCKCONTACTS];
-  }
+  constructor(private http: HttpClient) {}
 
-  getContacts(): Contact[] {
-    return [...this.contacts];
+  getContacts() {
+    this.http.get<Contact[]>(this.firebaseUrl).subscribe(
+      (contacts: Contact[]) => {
+        this.contacts = contacts || []; // Ensure contacts is always an array
+        this.contacts.sort((a, b) => a.name.localeCompare(b.name));
+        this.contactListChangedEvent.next([...this.contacts]);
+      },
+      (error) => console.error('Error fetching contacts:', error)
+    );
   }
 
   getContact(id: string): Contact | undefined {
@@ -25,34 +29,32 @@ export class ContactService {
   }
 
   addContact(contact: Contact): void {
+    if (!contact) return;
     this.contacts.push(contact);
-    this.selectedContactEvent.next(this.contacts);
+    this.storeContacts();
   }
 
   updateContact(updatedContact: Contact): void {
     const index = this.contacts.findIndex(contact => contact.id === updatedContact.id);
-    if (index >= 0) {
+    if (index !== -1) {
       this.contacts[index] = updatedContact;
-      this.selectedContactEvent.next(this.contacts);
+      this.storeContacts();
     }
   }
 
-  // Add the deleteContact method
   deleteContact(contact: Contact): void {
     const index = this.contacts.findIndex(c => c.id === contact.id);
     if (index !== -1) {
       this.contacts.splice(index, 1);
-      this.selectedContactEvent.next(this.contacts);
+      this.storeContacts();
     }
   }
-  updateContacts(updatedContacts: Contact[]): void {
-    this.contacts = [...updatedContacts];
-    this.selectedContactEvent.next(this.contacts);
-  }
-  removeContact(contactId: string): void {
-    const index = this.contacts.findIndex(contact => contact.id === contactId);
-    if (index !== -1) {
-      this.contacts.splice(index, 1);
-    }
+
+  storeContacts(): void {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    this.http.put(this.firebaseUrl, this.contacts, { headers }).subscribe(
+      () => this.contactListChangedEvent.next([...this.contacts]),
+      (error) => console.error('Error saving contacts:', error)
+    );
   }
 }
