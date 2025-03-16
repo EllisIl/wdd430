@@ -1,6 +1,13 @@
 <div class="panel panel-default">
   <div class="panel-heading d-flex justify-content-between align-items-center">
     <h3 class="panel-title mb-0">Contacts</h3>
+    <input
+      #searchBox
+      type="text"
+      class="form-control"
+      placeholder="Search contacts..."
+      (keyup)="search(searchBox.value)"
+    />
     <a [routerLink]="['new']" class="btn btn-primary">Create New Contact</a>
   </div>
   <div class="panel-body">
@@ -12,7 +19,7 @@
   [cdkDropListConnectedTo]="['groupContactsList']"
   (cdkDropListDropped)="onDrop($event)">
   <app-contact-item
-    *ngFor="let contact of contacts"
+    *ngFor="let contact of contacts | contactsFilter:term"
     [contact]="contact"
     cdkDrag
     [cdkDragData]="contact"

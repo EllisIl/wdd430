@@ -9,12 +9,17 @@ import { ContactService } from './contact.service';
   styleUrls: ['./contacts.component.css']
 })
 export class ContactsComponent implements OnInit {
-  selectedContact: Contact[];
+  selectedContact!: Contact;
 
   constructor(private contactService: ContactService) {}
 
   ngOnInit(): void {
-    this.contactService.selectedContactEvent
-      .subscribe(contact => this.selectedContact = contact);
+    this.contactService.contactListChangedEvent.subscribe((contacts: Contact[]) => {
+      if (contacts.length > 0) {
+        this.selectedContact = contacts[0]; // Select the first contact by default
+      }
+    });
+
+    this.contactService.getContacts();
   }
 }

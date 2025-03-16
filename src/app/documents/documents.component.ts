@@ -6,15 +6,16 @@ import { DocumentService } from './document.service';
   selector: 'app-documents',
   standalone: false,
   templateUrl: './documents.component.html',
-  styleUrl: './documents.component.css'
+  styleUrls: ['./documents.component.css']
 })
 export class DocumentsComponent implements OnInit {
-  selectedDocument: Document[];
+  selectedDocument: Document | null = null;
 
   constructor(private documentService: DocumentService) {}
 
   ngOnInit(): void {
-    this.documentService.selectedDocumentEvent
-      .subscribe(document => this.selectedDocument = document);
+    this.documentService.documentListChangedEvent.subscribe((documents: Document[]) => {
+      this.selectedDocument = documents.length ? documents[0] : null;
+    });
   }
 }
