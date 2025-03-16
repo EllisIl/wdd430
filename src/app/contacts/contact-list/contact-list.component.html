@@ -1,25 +1,26 @@
-<div class="panel panel-default">
-  <div class="panel-heading d-flex justify-content-between align-items-center">
-    <h3 class="panel-title mb-0">Contacts</h3>
-    <a [routerLink]="['new']" class="btn btn-primary">Create New Contact</a>
+<div class="panel-body">
+  <div class="row mb-2">
+    <input
+      #searchBox
+      type="text"
+      class="form-control"
+      placeholder="Search contacts..."
+      (keyup)="search(searchBox.value)"
+    />
   </div>
-  <div class="panel-body">
-    <div class="row">
-      <div 
-  class="list-group" 
-  cdkDropList
-  [cdkDropListData]="contacts"
-  [cdkDropListConnectedTo]="['groupContactsList']"
-  (cdkDropListDropped)="onDrop($event)">
-  <app-contact-item
-    *ngFor="let contact of contacts"
-    [contact]="contact"
-    cdkDrag
-    [cdkDragData]="contact"
-  >
-  </app-contact-item>
-</div>
-
-    </div>
+  <div 
+    class="list-group" 
+    cdkDropList
+    [cdkDropListData]="contacts"
+    [cdkDropListConnectedTo]="['groupContactsList']"
+    (cdkDropListDropped)="onDrop($event)">
+    
+    <app-contact-item
+      *ngFor="let contact of contacts | contactsFilter:term"
+      [contact]="contact"
+      cdkDrag
+      [cdkDragData]="contact"
+    >
+    </app-contact-item>
   </div>
 </div>

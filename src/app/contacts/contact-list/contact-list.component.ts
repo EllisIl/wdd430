@@ -11,6 +11,7 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 })
 export class ContactListComponent implements OnInit {
   contacts: Contact[] = [];
+  term: string = '';
 
   @Output() contactSelected = new EventEmitter<Contact>();
 
@@ -26,6 +27,10 @@ export class ContactListComponent implements OnInit {
 
   onSelected(contact: Contact): void {
     this.contactSelected.emit(contact);
+  }
+
+  search(value: string): void {
+    this.term = value;
   }
 
   onDrop(event: CdkDragDrop<Contact[]>): void {
